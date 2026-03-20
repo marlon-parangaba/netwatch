@@ -54,7 +54,8 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 **Objetivos:**
 - [ ] Implementar cliente SNMP com gosnmp
 - [ ] Criar serviço de discovery de rede
-- [ ] Implementar coleta de métricas
+- [ ] Implementar coleta de métricas (polling ativo)
+- [ ] **Implementar receptor de SNMP Traps**
 - [ ] Criar polling schedule
 - [ ] Suportar SNMP v1, v2c e v3
 
@@ -62,6 +63,7 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 - Módulo SNMP funcional
 - Discovery automático
 - Coleta de métricas
+- **Receptor de Traps funcional**
 
 **Responsável:** A definir
 **Status:** 🔴 Pendente
@@ -111,19 +113,23 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 ---
 
 ### 🔲 Fase 5: Sistema de Alertas (Semanas 17-19)
-> Notificações e triggers
+> Notificações, triggers e métricas derivadas
 
 **Objetivos:**
 - [ ] Criar modelo de regras de alerta
 - [ ] Implementar motor de avaliação de alertas
+- [ ] **Implementar retenção de 6 meses com sobreposição (rolling window)**
 - [ ] Suporte a múltiplos canais de notificação
 - [ ] Implementar escalação de alertas
 - [ ] Criar UI de configuração de alertas
+- [ ] **Criar métricas derivadas de alertas** (ex: duração de baterias baseada em eventos "ping down")
 
 **Entregáveis:**
 - Motor de alertas funcionando
+- Retenção e sobreposição de alertas
 - UI de configuração
 - Notificações funcionando
+- **Métricas derivadas calculadas**
 
 **Responsável:** A definir
 **Status:** 🔴 Pendente

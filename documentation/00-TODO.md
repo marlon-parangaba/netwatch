@@ -65,10 +65,17 @@
 
 ---
 
+## Decisões Tomadas
+
+- [x] **Multi-usuário**: Sistema com múltiplos usuários e roles
+- [x] **Polling + Traps**: Receber tanto polling ativo quanto SNMP Traps
+- [x] **Retenção de métricas de tráfego**: 1 ano
+- [x] **Retenção de alertas**: 6 meses com sobreposição (rolling window)
+- [x] **Métricas derivadas de alertas**: Ex: calcular tempo de duração de baterias baseado em eventos de "ping down"
+
 ## Decisões a Tomar
 
 - [ ] Qual formato de configuração? (YAML, TOML, JSON, ENV)
-- [ ] Como tratar múltiplos tenants? (um DB ou múltiplos?)
 - [ ] Fazer backup automático? Em que frequência?
 - [ ] Suportar plugins/extensões no futuro?
 - [ ] API pública para integrações?
@@ -77,11 +84,12 @@
 
 ## Perguntas em Aberto
 
-1. **Autenticação**: Será multi-usuário ou single-user?
-2. **SNMP Traps**: Precisará receber traps ou apenas polling?
+1. ~~**Autenticação**: Será multi-usuário ou single-user?~~ → **Multi-usuário**
+2. ~~**SNMP Traps**: Precisará receber traps ou apenas polling?~~ → **Ambos (polling + traps)**
 3. **Mapas**: Será limitado por número de dispositivos?
-4. **Armazenamento de métricas**: Por quanto tempo reter dados?
+4. ~~**Armazenamento de métricas**: Por quanto tempo reter dados?~~ → **1 ano para tráfego, 6 meses para alertas**
 5. **Updates**: Canal stable vs beta vs nightly?
+6. **Roles**: Quais tipos de usuários? (admin, operator, viewer)
 
 ---
 

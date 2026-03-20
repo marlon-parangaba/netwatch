@@ -22,9 +22,12 @@ O NetWatch segue uma arquitetura **cliente-servidor** com separação clara entr
 - **Responsabilidades**:
   - API RESTful
   - WebSocket para tempo real
-  - Coleta SNMP
+  - Coleta SNMP (polling ativo)
+  - **Receptor de SNMP Traps**
   - Processamento de dados
+  - **Gestão multi-usuário (auth, roles)**
   - Gestão de alertas
+  - **Cálculo de métricas derivadas de alertas**
   - Armazenamento (PostgreSQL)
 
 ### 3. Banco de Dados
@@ -48,8 +51,8 @@ O NetWatch segue uma arquitetura **cliente-servidor** com separação clara entr
                             │                    │                    │
                             ▼                    ▼                    ▼
                      ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-                     │ PostgreSQL   │     │   Agente     │     │   Agente     │
-                     │  (Dados)     │     │   SNMP       │     │   SNMP       │
+                     │ PostgreSQL   │     │   Polling    │     │   Trap       │
+                     │  (Dados)     │     │   SNMP       │     │   Receiver   │
                      └──────────────┘     └──────────────┘     └──────────────┘
                                                  │                    │
                                                  └────────┬───────────┘
@@ -59,6 +62,27 @@ O NetWatch segue uma arquitetura **cliente-servidor** com separação clara entr
                                                  │    de Rede   │
                                                  └──────────────┘
 ```
+
+### Modos de Coleta SNMP
+
+1. **Polling (Ativo)**: Backend faz requisições periódicas aos dispositivos
+2. **Traps (Passivo)**: Dispositivos enviam notificações ao backend quando eventos ocorrem
+
+## Retenção de Dados
+
+| Tipo de Dado | Retention | Estratégia |
+|--------------|-----------|------------|
+| **Métricas de Tráfego** | 1 ano | Particionamento por mês |
+| **Alertas** | 6 meses | Rolling window (sobreposição) |
+| **Eventos de Downtime** | Vitalício | Para cálculo de métricas derivadas |
+
+### Exemplo: Métricas Derivadas de Alertas
+
+Quando um dispositivo fica offline (ping down):
+1. Registrar evento `down` com timestamp
+2. Quando voltar, registrar evento `up` com timestamp
+3. Calcular duração do downtime
+4. **Métricas derivadas**: Tempo de duração de baterias/UPS, MTBF, MTTR
 
 ## Estrutura de Diretórios (Backend)
 
@@ -147,7 +171,8 @@ netwatch-frontend/
 
 ## Segurança
 
-- Autenticação JWT
+- **Autenticação multi-usuário** com JWT
+- Roles: Admin, Operator, Viewer
 - Senha hasheada com bcrypt
 - HTTPS obrigatório para API
 - Rate limiting

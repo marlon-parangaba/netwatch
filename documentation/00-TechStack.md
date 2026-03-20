@@ -80,11 +80,13 @@ github.com/gofiber/fiber/v2          // Web framework
 github.com/gofiber/websocket/v2       // WebSocket
 gorm.io/gorm                          // ORM
 gorm.io/driver/postgres               // Driver PostgreSQL
-github.com/gosnmp/gosnmp              // Cliente SNMP
+github.com/oschwald/geoip2-golang    // GeoIP (opcional)
+github.com/gosnmp/gosnmp              // Cliente SNMP + Trap receiver
 github.com/spf13/viper                // Configuração
 github.com/golang-jwt/jwt/v5          // JWT
 github.com/golang-migrate/migrate/v4  // Migrações
 golang.org/x/crypto                   // bcrypt
+github.com/natefinch/lumberjack       // Log rotation
 ```
 
 ## Dependências Principais (Frontend)
