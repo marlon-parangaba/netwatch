@@ -6,45 +6,61 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 
 ## Fases do Projeto
 
-### 🔲 Fase 0: Fundação (Semanas 1-2)
+### ✅ Fase 0: Fundação (Semanas 1-2) — CONCLUÍDA
 > Setup inicial e arquitetura base
 
 **Objetivos:**
-- [ ] Setup repositório Git
-- [ ] Configurar estrutura de diretórios
-- [ ] Criar documentação inicial (esta documentação)
-- [ ] Setup ambiente de desenvolvimento
-- [ ] Criar Dockerfile/docker-compose para backend
+- [x] Setup repositório Git
+- [x] Configurar estrutura de diretórios
+- [x] Criar documentação inicial (esta documentação)
+- [x] Setup ambiente de desenvolvimento
+- [x] Criar Dockerfile/docker-compose para backend
 
 **Entregáveis:**
-- Repositório com estrutura base
-- Documentação completa
-- Ambiente Docker para desenvolvimento
+- ✅ Repositório com estrutura base
+- ✅ Documentação completa
+- ✅ Ambiente Docker para desenvolvimento
 
-**Responsável:** A definir
-**Status:** 🟡 A fazer
+**Implementado:**
+- `docker-compose.yml` — PostgreSQL 16 + Backend + Adminer
+- `netwatch-backend/Dockerfile` — Build multi-stage (Go → Alpine)
+- `.env.example` — Variáveis documentadas
+
+**Status:** 🟢 Concluída
 
 ---
 
-### 🔲 Fase 1: Backend Core (Semanas 3-5)
+### ✅ Fase 1: Backend Core (Semanas 3-5) — CONCLUÍDA
 > API básica e conexão com banco de dados
 
 **Objetivos:**
-- [ ] Configurar PostgreSQL com Docker
-- [ ] Setup GORM e criar modelos base
-- [ ] Implementar migrações
-- [ ] Criar API REST de dispositivos (CRUD)
-- [ ] Implementar autenticação JWT
-- [ ] Setup logging e error handling
+- [x] Configurar PostgreSQL com Docker
+- [x] Setup GORM e criar modelos base
+- [x] Implementar migrações
+- [x] Criar API REST de dispositivos (CRUD)
+- [x] Implementar autenticação JWT
+- [x] Setup logging e error handling
 
 **Entregáveis:**
-- API REST funcional
-- Autenticação funcionando
-- Migrations executando
-- Swagger/OpenAPI documentado
+- ✅ API REST funcional
+- ✅ Autenticação funcionando (JWT + refresh)
+- ✅ Migrations executando
+- [ ] Swagger/OpenAPI documentado
 
-**Responsável:** A definir
-**Status:** 🔴 Pendente
+**Implementado:**
+- `internal/models/` — User, Device, Metric, Alert
+- `internal/repository/` — User, Device, Metric (interfaces limpas)
+- `internal/services/` — AuthService (JWT), DeviceService (CRUD)
+- `internal/handlers/` — Auth, Device, Metric + middleware JWT/RBAC
+- `cmd/server/main.go` — Graceful shutdown, CORS, rate limiting, health check
+- `config.yaml` + `internal/config/` — Suporte YAML + env vars
+- `migrations/001_initial_schema.up.sql` — Schema completo com:
+  - Particionamento de métricas por mês (retenção 1 ano)
+  - `downtime_events` vitalício (MTBF/MTTR)
+  - `alert_events` com rolling window de 6 meses
+  - Triggers para `updated_at` automático
+
+**Status:** 🟢 Concluída (pendendo Swagger)
 
 ---
 
@@ -189,6 +205,7 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 │Fun-dação│ │ Backend │ │  SNMP   │ │Front-end│ │ Mapas   │ │ Alertas │
 │  2 sem  │ │  3 sem  │ │  3 sem  │ │  4 sem  │ │  4 sem  │ │  3 sem  │
 └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘
+  ✅ ✅                                             
 
      Set          Out          Nov
      ▼            ▼            ▼
@@ -199,16 +216,16 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 └─────────┘ └─────────┘ └─────────┘
 ```
 
-##里程碑 (Milestones)
+## Milestones
 
-| Versão | Descrição | Data Alvo |
-|--------|-----------|-----------|
-| v0.1.0 | Backend + API base | 2026-04-15 |
-| v0.2.0 | SNMP funcional | 2026-05-10 |
-| v0.3.0 | Frontend básico | 2026-06-15 |
-| v0.4.0 | Mapas de rede | 2026-07-15 |
-| v0.5.0 | Sistema de alertas | 2026-08-15 |
-| v1.0.0 | Release production-ready | 2026-11-01 |
+| Versão | Descrição | Status | Data |
+|--------|-----------|--------|------|
+| v0.1.0 | Backend + API base | 🟢 Concluída | 2026-03-20 |
+| v0.2.0 | SNMP funcional | 🔄 Em progresso | — |
+| v0.3.0 | Frontend básico | 🔴 Pendente | — |
+| v0.4.0 | Mapas de rede | 🔴 Pendente | — |
+| v0.5.0 | Sistema de alertas | 🔴 Pendente | — |
+| v1.0.0 | Release production-ready | 🔴 Pendente | — |
 
 ---
 

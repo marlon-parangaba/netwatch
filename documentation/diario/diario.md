@@ -13,6 +13,7 @@ Este é o diário de desenvolvimento do NetWatch. Aqui você registra:
 ## Sessões
 
 - [[Sessão 001 - 2026-03-20|Início do Projeto]] - Setup inicial e planejamento
+- [[Sessão 002 - 2026-03-20 - Fases 0-1|Implementação Backend]] - Implementação das Fases 0 e 1
 
 ---
 
