@@ -94,24 +94,34 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 
 ---
 
-### 🔲 Fase 3: Frontend Base (Semanas 9-12)
+### ✅ Fase 3: Frontend Base (Semanas 9-12) — CONCLUÍDA
 > Interface desktop básica
 
 **Objetivos:**
-- [ ] Setup Electron + React + TypeScript
-- [ ] Implementar sistema de autenticação no frontend
-- [ ] Criar dashboard básico
-- [ ] Listar e gerenciar dispositivos
-- [ ] Visualizar métricas de dispositivo
-- [ ] Configurar electron-builder para builds
+- [x] Setup Electron + React + TypeScript
+- [x] Implementar sistema de autenticação no frontend
+- [x] Criar dashboard básico
+- [x] Listar e gerenciar dispositivos
+- [x] Visualizar métricas de dispositivo
+- [x] Configurar electron-builder para builds
 
 **Entregáveis:**
-- App desktop executável
-- Login/logout funcionando
-- Dashboard com widgets básicos
+- ✅ App desktop executável
+- ✅ Login/logout funcionando
+- ✅ Dashboard com widgets básicos
 
-**Responsável:** A definir
-**Status:** 🔴 Pendente
+**Implementado:**
+- `electron/main.ts` — BrowserWindow, electron-store, IPC handlers
+- `electron/preload.ts` — contextBridge seguro
+- `src/types/index.ts` — 100% alinhado ao backend
+- `src/services/api.ts` — Axios com refresh automático de JWT
+- `src/stores/authStore.ts` — Zustand + persist
+- `src/stores/uiStore.ts` — tema dark/light, sidebar
+- **Componentes**: Button, Input, Select, Card, Badge, Modal, ConfirmModal, Table, Pagination
+- **Layout**: Sidebar (collapse/expand), Header (user info, theme toggle), MainLayout
+- **Páginas**: Login, Dashboard, Devices, DeviceDetail, Discovery, Alerts, Maps, Settings
+
+**Status:** 🟢 Concluída
 
 ---
 
@@ -213,7 +223,7 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 │Fun-dação│ │ Backend │ │  SNMP   │ │Front-end│ │ Mapas   │ │ Alertas │
 │  2 sem  │ │  3 sem  │ │  3 sem  │ │  4 sem  │ │  4 sem  │ │  3 sem  │
 └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘
-  ✅ ✅ ✅                                             
+  ✅ ✅ ✅ ✅                                             
 
      Set          Out          Nov
      ▼            ▼            ▼
@@ -230,8 +240,8 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 |--------|-----------|--------|------|
 | v0.1.0 | Backend + API base | 🟢 Concluída | 2026-03-20 |
 | v0.2.0 | SNMP funcional | 🟢 Concluída | 2026-03-20 |
-| v0.3.0 | Frontend básico | 🔄 Em progresso | — |
-| v0.4.0 | Mapas de rede | 🔴 Pendente | — |
+| v0.3.0 | Frontend básico | 🟢 Concluída | 2026-03-20 |
+| v0.4.0 | Mapas de rede | 🔄 Em progresso | — |
 | v0.5.0 | Sistema de alertas | 🔴 Pendente | — |
 | v1.0.0 | Release production-ready | 🔴 Pendente | — |
 
