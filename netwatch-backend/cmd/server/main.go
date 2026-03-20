@@ -75,9 +75,13 @@ func main() {
 	authSvc   := services.NewAuthService(userRepo, cfg)
 	deviceSvc := services.NewDeviceService(deviceRepo, log)
 
-	authHandler   := handlers.NewAuthHandler(authSvc, log)
-	deviceHandler := handlers.NewDeviceHandler(deviceSvc, log)
-	metricHandler := handlers.NewMetricHandler(metricRepo, log)
+	// PollerService: inicia após o servidor HTTP estar no ar
+	pollerSvc := services.NewPollerService(deviceRepo, metricRepo, cfg, log, nil)
+
+	authHandler      := handlers.NewAuthHandler(authSvc, log)
+	deviceHandler    := handlers.NewDeviceHandler(deviceSvc, log)
+	metricHandler    := handlers.NewMetricHandler(metricRepo, log)
+	discoveryHandler := handlers.NewDiscoveryHandler(deviceSvc, deviceRepo, pollerSvc, log)
 
 	// ----------------------------------------------------------------
 	// 5. Fiber App
@@ -148,6 +152,10 @@ func main() {
 	devices.Put("/:id", handlers.RequireRole(models.RoleOperator), deviceHandler.Update)
 	devices.Delete("/:id", handlers.RequireRole(models.RoleAdmin), deviceHandler.Delete)
 
+	// Discovery (operator+)
+	devices.Post("/discover", handlers.RequireRole(models.RoleOperator), discoveryHandler.Discover)
+	devices.Post("/discover/import", handlers.RequireRole(models.RoleOperator), discoveryHandler.ImportDiscovered)
+
 	// Metrics (viewer+)
 	metrics := protected.Group("/metrics")
 	metrics.Get("/:deviceId/history", metricHandler.GetHistory)
@@ -166,6 +174,10 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 
+	// Contexto global para os serviços de background
+	bgCtx, bgCancel := context.WithCancel(context.Background())
+	defer bgCancel()
+
 	go func() {
 		log.Info("Servidor HTTP iniciado", zap.String("addr", addr))
 		if err := app.Listen(addr); err != nil {
@@ -173,13 +185,24 @@ func main() {
 		}
 	}()
 
+	// Iniciar o PollerService após o servidor estar no ar
+	go func() {
+		time.Sleep(2 * time.Second) // aguardar o HTTP subir
+		if err := pollerSvc.Start(bgCtx); err != nil {
+			log.Error("Erro ao iniciar PollerService", zap.Error(err))
+		}
+	}()
+
 	<-quit
 	log.Info("Encerrando servidor...")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	bgCancel()
+	pollerSvc.Stop()
 
-	if err := app.ShutdownWithContext(ctx); err != nil {
+	shutCtx, shutCancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer shutCancel()
+
+	if err := app.ShutdownWithContext(shutCtx); err != nil {
 		log.Error("Erro no graceful shutdown", zap.Error(err))
 	}
 

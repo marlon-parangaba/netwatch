@@ -64,25 +64,33 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 
 ---
 
-### 🔲 Fase 2: SNMP Engine (Semanas 6-8)
+### ✅ Fase 2: SNMP Engine (Semanas 6-8) — CONCLUÍDA
 > Comunicação SNMP com dispositivos
 
 **Objetivos:**
-- [ ] Implementar cliente SNMP com gosnmp
-- [ ] Criar serviço de discovery de rede
-- [ ] Implementar coleta de métricas (polling ativo)
-- [ ] **Implementar receptor de SNMP Traps**
-- [ ] Criar polling schedule
-- [ ] Suportar SNMP v1, v2c e v3
+- [x] Implementar cliente SNMP com gosnmp
+- [x] Criar serviço de discovery de rede
+- [x] Implementar coleta de métricas (polling ativo)
+- [x] **Implementar receptor de SNMP Traps**
+- [x] Criar polling schedule
+- [x] Suportar SNMP v1, v2c e v3
 
 **Entregáveis:**
-- Módulo SNMP funcional
-- Discovery automático
-- Coleta de métricas
-- **Receptor de Traps funcional**
+- ✅ Módulo SNMP funcional
+- ✅ Discovery automático (CIDR, worker pool, detecção de vendor)
+- ✅ Coleta de métricas
+- ✅ Receptor de Traps funcional
 
-**Responsável:** A definir
-**Status:** 🔴 Pendente
+**Implementado:**
+- `internal/snmp/oids.go` — OIDs MIB-II, IF-MIB, HOST-RESOURCES, UCD-SNMP, Mikrotik
+- `internal/snmp/client.go` — Wrapper gosnmp (v1/v2c/v3), GetSysInfo, GetInterfaces, Walk
+- `internal/snmp/discovery.go` — Varredura CIDR concorrente, detecção de vendor por sysOID
+- `internal/snmp/poller.go` — Poller (device) + PollerScheduler (todos os devices)
+- `internal/snmp/trap_receiver.go` — UDP listener, classifica coldStart, warmStart, linkDown, linkUp, authFailure
+- `internal/services/poller_service.go` — Orquestra Scheduler + TrapReceiver
+- `internal/handlers/discovery_handler.go` — POST /api/devices/discover, /api/devices/discover/import
+
+**Status:** 🟢 Concluída
 
 ---
 
@@ -205,7 +213,7 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 │Fun-dação│ │ Backend │ │  SNMP   │ │Front-end│ │ Mapas   │ │ Alertas │
 │  2 sem  │ │  3 sem  │ │  3 sem  │ │  4 sem  │ │  4 sem  │ │  3 sem  │
 └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘
-  ✅ ✅                                             
+  ✅ ✅ ✅                                             
 
      Set          Out          Nov
      ▼            ▼            ▼
@@ -221,8 +229,8 @@ O desenvolvimento será dividido em **fases iterativas**, com release early e of
 | Versão | Descrição | Status | Data |
 |--------|-----------|--------|------|
 | v0.1.0 | Backend + API base | 🟢 Concluída | 2026-03-20 |
-| v0.2.0 | SNMP funcional | 🔄 Em progresso | — |
-| v0.3.0 | Frontend básico | 🔴 Pendente | — |
+| v0.2.0 | SNMP funcional | 🟢 Concluída | 2026-03-20 |
+| v0.3.0 | Frontend básico | 🔄 Em progresso | — |
 | v0.4.0 | Mapas de rede | 🔴 Pendente | — |
 | v0.5.0 | Sistema de alertas | 🔴 Pendente | — |
 | v1.0.0 | Release production-ready | 🔴 Pendente | — |
